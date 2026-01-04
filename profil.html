@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Smooth | Liquid Glass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #030303;
+            --accent-glow: rgba(255, 255, 255, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --smooth-curve: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            font-family: 'Inter', sans-serif;
+            color: white;
+            display: flex; justify-content: center;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* ----- BACKGROUND ELEGAN & MINIMALIS ----- */
+        .minimal-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(at 0% 0%, #0a0a0a 0%, #030303 100%);
+            overflow: hidden;
+        }
+
+        /* Cahaya halus yang bergerak lambat */
+        .minimal-bg::before, .minimal-bg::after {
+            content: "";
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            filter: blur(80px);
+            animation: drift 25s infinite alternate ease-in-out;
+        }
+
+        .minimal-bg::before {
+            top: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 60%);
+        }
+
+        .minimal-bg::after {
+            bottom: -300px;
+            right: -200px;
+            animation-duration: 35s;
+            animation-delay: -5s;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(15%, 10%) scale(1.1); }
+        }
+
+        /* Tekstur grain halus */
+        .noise-texture {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        /* ----------------------------------------- */
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+
+        .container {
+            width: 100%; max-width: 400px;
+            padding: 70px 20px; text-align: center;
+            z-index: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: reveal-in 1.2s var(--smooth-curve) forwards;
+        }
+
+        @keyframes reveal-in {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-wrapper {
+            position: relative; width: 130px; height: 130px; margin: 0 auto 40px;
+        }
+
+        .halo-ring {
+            position: absolute; inset: -15px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        .halo-ring::before {
+            content: ''; position: absolute; top: -2px; left: 50%;
+            width: 10px; height: 10px; background: white;
+            border-radius: 50%; box-shadow: 0 0 15px white;
+        }
+
+        @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .profile-img { 
+            width: 100%; height: 100%; border-radius: 50%; 
+            object-fit: cover; z-index: 2; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .links { display: flex; flex-direction: column; gap: 20px; }
+
+        .link-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px 28px; border-radius: 24px;
+            text-decoration: none; color: white;
+            font-weight: 500; font-size: 0.95rem;
+            display: flex; align-items: center;
+            position: relative; overflow: visible;
+            backdrop-filter: blur(20px);
+            transition: all 0.6s var(--smooth-curve);
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .saweria-special {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .saweria-special:hover {
+            border-color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .ghost-aura {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            filter: blur(25px);
+            z-index: -1;
+        }
+
+        .link-item:active {
+            transform: scale(0.92) !important;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.1s ease;
+        }
+
+        .link-item i { margin-right: 18px; font-size: 1.2rem; opacity: 0.7; transition: 0.4s; }
+        .link-item:hover i { opacity: 1; transform: scale(1.1); }
+        .link-item span { letter-spacing: 0.8px; font-weight: 400; }
+
+        .footer-note { 
+            margin-top: 100px; color: rgba(255, 255, 255, 0.1); 
+            font-size: 0.6rem; letter-spacing: 8px; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="minimal-bg"></div>
+    <div class="noise-texture"></div>
+
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <div class="profile-wrapper reveal" style="animation-delay: 0.1s;">
+            <div class="halo-ring"></div>
+            <img src="https://files.catbox.moe/xbnpaa.jpg" alt="Profile" class="profile-img">
+        </div>
+        
+        <h1 id="type-name" class="reveal" style="font-weight: 600; letter-spacing: -1px; margin-bottom: 10px; animation-delay: 0.2s;"></h1>
+        <p id="type-bio" class="reveal" style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 45px; font-weight: 300; animation-delay: 0.3s;"></p>
+
+        <div class="links">
+            <a href="https://saweria.co/Rinoandra" class="link-item reveal saweria-special" target="_blank" style="animation-delay: 0.4s;">
+                <i class="fas fa-crown"></i> <span>SAWERIA SUPPORT</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@xezarian7?_r=1&_t=ZS-92laiYxHEG7" class="link-item reveal" target="_blank" style="animation-delay: 0.5s;">
+                <i class="fab fa-tiktok"></i> <span>TIKTOK</span>
+            </a>
+
+            <a href="https://www.instagram.com/xezarian7?igsh=cmhvYTF5a2E1dXo=" class="link-item reveal" target="_blank" style="animation-delay: 0.6s;">
+                <i class="fab fa-instagram"></i> <span>INSTAGRAM</span>
+            </a>
+
+            <a href="https://t.me/abulbrofck" class="link-item reveal" target="_blank" style="animation-delay: 0.7s;">
+                <i class="fab fa-telegram-plane"></i> <span>TELEGRAM</span>
+            </a>
+        </div>
+
+        <div class="footer-note reveal" style="animation-delay: 0.9s;">AESTHETIC ARCHIVE • 2026</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 20 },
+                "color": { "value": "#ffffff" },
+                "opacity": { "value": 0.03 },
+                "size": { "value": 1 },
+                "move": { "enable": true, "speed": 0.2, "direction": "top" }
+            }
+        });
+
+        setTimeout(() => {
+            new TypeIt("#type-name", { strings: "Ardiant Custom", speed: 80, cursor: false }).go();
+            new TypeIt("#type-bio", { speed: 40 }).type("Designing silent luxury in a noisy world.").go();
+        }, 500);
+
+        document.querySelectorAll('.link-item').forEach(button => {
+            button.addEventListener('mousemove', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                button.style.transform = `translate(${x * 0.15}px, ${y * 0.3}px) scale(1.02)`;
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = `translate(0, 0) scale(1)`;
+            });
+
+            button.addEventListener('mousedown', function() {
+                const aura = document.createElement('div');
+                aura.className = 'ghost-aura';
+                this.appendChild(aura);
+                
+                aura.animate([
+                    { opacity: 0, transform: 'scale(0.8)' },
+                    { opacity: 0.3, transform: 'scale(1.3)' },
+                    { opacity: 0, transform: 'scale(1.6)' }
+                ], {
+                    duration: 600,
+                    easing: 'ease-out'
+                }).onfinish = () => aura.remove();
+            });
+        });
+    </script>
+</body>
+</html>
